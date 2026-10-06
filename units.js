@@ -7,7 +7,7 @@
 const BOOKS = [
   {
     id: "book1",
-    title: "Book 1",
+    title: "Topic Book",
     subtitle: "English wordlists HU → EN",
     units: [
       {
