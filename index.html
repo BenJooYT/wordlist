@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magyar → English vocab trainer</title>
+  <meta name="description" content="Study Hungarian to English vocab: flashcards + 20-words-in-5-minutes HU→EN typing sprint. Static site, works on GitHub Pages." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="flag-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="wrap">
+    <header>
+      <h1>Magyar → English trainer</h1>
+      <p>Flashcards + sprint: 20 words in 5:00, Hungarian shown, type the English.</p>
+    </header>
+
+    <section aria-label="Units">
+      <div class="kicker">Unit</div>
+      <div class="units" id="units"></div>
+    </section>
+
+    <nav class="tabs" aria-label="Modes">
+      <button class="tab" data-mode="flash" aria-selected="true">🗂 Flashcards</button>
+      <button class="tab" data-mode="sprint" aria-selected="false">⏱ 20 in 5:00</button>
+    </nav>
+
+    <main>
+      <section id="flash-view" aria-label="Flashcards"></section>
+      <section id="sprint-view" aria-label="Typing sprint" hidden></section>
+    </main>
+
+    <footer>
+      Static site — no account, no tracking. Progress (known cards) stays in this browser's localStorage.<br />
+      Add a unit: edit <code>units.js</code>, push, GitHub Pages redeploys.
+    </footer>
+  </div>
+  <script src="units.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

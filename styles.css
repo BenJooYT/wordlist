@@ -1,0 +1,115 @@
+:root {
+  --bg: #faf8f4;
+  --card: #ffffff;
+  --ink: #1d1a16;
+  --muted: #6f675e;
+  --line: #e8e0d5;
+  --red: #c73e3a;
+  --green: #2e7d4f;
+  --green-bg: #e6f4ec;
+  --red-bg: #fbe9e8;
+  --accent: #2e7d4f;
+  --radius: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141210;
+    --card: #1e1b18;
+    --ink: #f2ede6;
+    --muted: #b3a89c;
+    --line: #38322c;
+    --green-bg: #1c3527;
+    --red-bg: #3d2321;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+.flag-bar { display: flex; height: 6px; }
+.flag-bar span:nth-child(1) { flex: 1; background: #c73e3a; }
+.flag-bar span:nth-child(2) { flex: 1; background: #fff; border-bottom: 1px solid #eee; }
+.flag-bar span:nth-child(3) { flex: 1; background: #2e7d4f; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 16px 16px 48px; }
+header h1 { font-size: 1.5rem; margin: 12px 0 4px; }
+header p { color: var(--muted); margin: 0 0 12px; }
+.units { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.unit-pill {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  min-height: 44px;
+}
+.unit-pill[aria-pressed="true"] {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  font-weight: 700;
+}
+.tabs { display: flex; gap: 8px; margin: 8px 0 16px; }
+.tab {
+  flex: 1;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  min-height: 48px;
+}
+.tab[aria-selected="true"] { border-color: var(--accent); outline: 2px solid var(--accent); font-weight: 700; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.kicker { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.big-hu { font-size: 2.4rem; font-weight: 800; margin: 8px 0; text-align: center; }
+.big-en { font-size: 1.6rem; margin: 8px 0; text-align: center; color: var(--accent); font-weight: 700; }
+.alt { text-align: center; color: var(--muted); font-size: 0.9rem; min-height: 1.4em; }
+.flip-hint { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
+.flashcard { cursor: pointer; min-height: 240px; display: flex; flex-direction: column; justify-content: center; }
+.row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+button.primary, button.ghost {
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  min-height: 48px;
+  border: 1px solid var(--line);
+}
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; flex: 1; }
+button.ghost { background: var(--card); color: var(--ink); flex: 1; }
+button:disabled { opacity: 0.5; cursor: default; }
+.progress { color: var(--muted); font-size: 0.95rem; margin-top: 10px; text-align: center; }
+input.answer {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  margin-top: 8px;
+}
+input.answer:focus { border-color: var(--accent); outline: 2px solid var(--accent); }
+.feedback { min-height: 2.2em; margin-top: 10px; font-weight: 700; text-align: center; }
+.feedback.ok { color: var(--green); }
+.feedback.no { color: var(--red); }
+.timer { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.3rem; }
+.timer.danger { color: var(--red); }
+.sprint-top { display: flex; justify-content: space-between; align-items: center; }
+.missed { margin-top: 12px; }
+.missed li { margin: 6px 0; }
+footer { margin-top: 24px; color: var(--muted); font-size: 0.85rem; text-align: center; }
+.sr { position: absolute; left: -9999px; }
