@@ -3,12 +3,15 @@ const SPRINT_N = 20;
 const SPRINT_SEC = 5 * 60;
 
 const $ = (s) => document.querySelector(s);
-const unitsEl = $("#units");
+const dashView = $("#view-dashboard");
+const bookView = $("#view-book");
+const studyView = $("#view-study");
 const flashView = $("#flash-view");
 const sprintView = $("#sprint-view");
 const tabs = [...document.querySelectorAll(".tab")];
 
-let unitId = UNITS[0].id;
+let bookId = BOOKS[0].id;
+let unitId = BOOKS[0].units[0].id;
 let mode = "flash";
 
 // flash state
@@ -29,7 +32,8 @@ const store = {
   save(d) { localStorage.setItem("huvocab-v1", JSON.stringify(d)); }
 };
 
-function unit() { return UNITS.find(u => u.id === unitId) || UNITS[0]; }
+function book() { return BOOKS.find(b => b.id === bookId) || BOOKS[0]; }
+function unit() { const b = book(); return (b.units || []).find(u => u.id === unitId) || b.units[0]; }
 // Flat word list; sectioned units ({ sections: [{ name, words }] }) are
 // flattened with `sec` attached so the UI can show the section name.
 function wordsOf(u) {
@@ -59,17 +63,74 @@ function shuffled(arr) {
   return a;
 }
 
-// ---- units + tabs ----
-function renderUnits() {
-  unitsEl.innerHTML = "";
-  for (const u of UNITS) {
-    const b = document.createElement("button");
-    b.className = "unit-pill";
-    b.textContent = `${u.title} (${wordsOf(u).length})`;
-    b.setAttribute("aria-pressed", u.id === unitId ? "true" : "false");
-    b.onclick = () => { unitId = u.id; loadKnown(); renderUnits(); resetFlash(); renderFlash(); renderSprintIntro(); };
-    unitsEl.appendChild(b);
+// ---- dashboard: books -> units -> study ----
+function knownCount(uid) {
+  const d = store.load();
+  return ((d[uid] && d[uid].known) || []).length;
+}
+function show(which) {
+  stopTimer();
+  dashView.hidden = which !== "dashboard";
+  bookView.hidden = which !== "book";
+  studyView.hidden = which !== "study";
+}
+function renderDashboard() {
+  dashView.innerHTML = `<div class="kicker">Books · ${BOOKS.length}</div>`;
+  for (const b of BOOKS) {
+    let total = 0, known = 0;
+    for (const u of b.units) { total += wordsOf(u).length; known += Math.min(knownCount(u.id), wordsOf(u).length); }
+    const pct = total ? Math.round(100 * known / total) : 0;
+    const card = document.createElement("button");
+    card.className = "menu-card";
+    card.innerHTML = `<h3>${escapeHtml(b.title)}</h3>
+      <p>${escapeHtml(b.subtitle || "")}</p>
+      <div class="meta">${b.units.length} unit${b.units.length === 1 ? "" : "s"} · ${total} words · ${known} known</div>
+      <div class="bar" aria-hidden="true"><span style="width:${pct}%"></span></div>`;
+    card.onclick = () => { bookId = b.id; renderBook(); show("book"); };
+    dashView.appendChild(card);
   }
+}
+function renderBook() {
+  const b = book();
+  bookView.innerHTML = "";
+  const back = document.createElement("button");
+  back.className = "back";
+  back.textContent = "‹ All books";
+  back.onclick = () => { renderDashboard(); show("dashboard"); };
+  bookView.appendChild(back);
+  const h = document.createElement("h2");
+  h.textContent = b.title;
+  h.style.margin = "0 0 4px";
+  bookView.appendChild(h);
+  const sub = document.createElement("p");
+  sub.style.cssText = "color:var(--muted);margin:0 0 12px";
+  sub.textContent = b.subtitle || "";
+  bookView.appendChild(sub);
+  for (const u of b.units) {
+    const total = wordsOf(u).length;
+    const known = Math.min(knownCount(u.id), total);
+    const pct = total ? Math.round(100 * known / total) : 0;
+    const secs = (u.sections || []).map(s => s.name).join(" · ");
+    const card = document.createElement("button");
+    card.className = "menu-card";
+    card.innerHTML = `<h3>${escapeHtml(u.title)}</h3>
+      ${secs ? `<p>${escapeHtml(secs)}</p>` : ""}
+      <div class="meta">${total} words · ${known} known</div>
+      <div class="bar" aria-hidden="true"><span style="width:${pct}%"></span></div>`;
+    card.onclick = () => openUnit(u.id);
+    bookView.appendChild(card);
+  }
+}
+function openUnit(uid) {
+  unitId = uid;
+  mode = "flash";
+  tabs.forEach(x => x.setAttribute("aria-selected", x.dataset.mode === "flash" ? "true" : "false"));
+  flashView.hidden = false;
+  sprintView.hidden = true;
+  $("#study-title").textContent = unit().title;
+  $("#back-to-book-label").textContent = book().title;
+  loadKnown(); resetFlash(); renderFlash(); renderSprintIntro();
+  show("study");
 }
 tabs.forEach(t => t.onclick = () => {
   mode = t.dataset.mode;
@@ -287,8 +348,6 @@ function escapeHtml(s) {
 }
 
 // init
-renderUnits();
-loadKnown();
-resetFlash();
-renderFlash();
-renderSprintIntro();
+$("#study-back").onclick = () => { renderBook(); show("book"); };
+renderDashboard();
+show("dashboard");

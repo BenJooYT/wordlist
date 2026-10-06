@@ -1,13 +1,20 @@
-// Units format: one unit = { id, title, subtitle, sections: [{ name, words }] }
-// words: [{ hu, en: [alternatives] }]. HU is shown, you type the EN.
-// Checker is case-insensitive, ignores extra spaces and a leading "to ".
-// To add a unit: copy the template at the bottom. Nothing else changes.
-const UNITS = [
+// Books format:
+// BOOKS = [{ id, title, subtitle, units: [{ id, title, subtitle,
+//   sections: [{ name, words: [{ hu, en: [alternatives] }] }] }] }]
+// HU is shown, you type the EN. Checker is case-insensitive,
+// ignores extra spaces and a leading "to ".
+// To add a book or unit: copy the template at the bottom. Nothing else changes.
+const BOOKS = [
   {
-    id: "u5",
-    title: "Unit 5 — The World of Work",
-    subtitle: "Wordlist 5 · 6 sections, ~190 phrases",
-    sections: [
+    id: "book1",
+    title: "Book 1",
+    subtitle: "English wordlists HU → EN",
+    units: [
+      {
+        id: "u5",
+        title: "Unit 5 — The World of Work",
+        subtitle: "Wordlist 5 · 6 sections, ~190 phrases",
+        sections: [
       {
         name: "Summer & part-time jobs",
         words: [
@@ -229,15 +236,24 @@ const UNITS = [
         ]
       }
     ]
+        }
+      ]
   }
 ];
 
-// Template for the next photo wordlist — copy, paste above, fill in:
+// Template — new book (paste inside BOOKS) or new unit (paste inside a book's units):
 // {
-//   id: "u6",
-//   title: "Unit 6 — <topic>",
-///   subtitle: "Wordlist 6 · …",
-///   sections: [
-//     { name: "<section>", words: [{ hu: "…", en: ["…"] }] },
+//   id: "book2",
+//   title: "Book 2 — <name>",
+///   subtitle: "…",
+///   units: [
+//     {
+//       id: "u1",
+//       title: "Unit 1 — <topic>",
+///       subtitle: "…",
+///       sections: [
+//         { name: "<section>", words: [{ hu: "…", en: ["…"] }] },
+//       ]
+//     },
 //   ]
 // },

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Magyar → English vocab trainer</title>
-  <meta name="description" content="Study Hungarian to English vocab: flashcards + 20-words-in-5-minutes HU→EN typing sprint. Static site, works on GitHub Pages." />
+  <meta name="description" content="Study Hungarian to English vocab: books → units → flashcards + 20-words-in-5-minutes HU→EN typing sprint. Static site, works on GitHub Pages." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,27 +12,29 @@
   <div class="wrap">
     <header>
       <h1>Magyar → English trainer</h1>
-      <p>Flashcards + sprint: 20 words in 5:00, Hungarian shown, type the English.</p>
+      <p>Pick a book → a unit → drill with flashcards or the 20-in-5:00 sprint (HU shown, type the EN).</p>
     </header>
 
-    <section aria-label="Units">
-      <div class="kicker">Unit</div>
-      <div class="units" id="units"></div>
-    </section>
-
-    <nav class="tabs" aria-label="Modes">
-      <button class="tab" data-mode="flash" aria-selected="true">🗂 Flashcards</button>
-      <button class="tab" data-mode="sprint" aria-selected="false">⏱ 20 in 5:00</button>
-    </nav>
-
     <main>
-      <section id="flash-view" aria-label="Flashcards"></section>
-      <section id="sprint-view" aria-label="Typing sprint" hidden></section>
+      <section id="view-dashboard" aria-label="Books"></section>
+
+      <section id="view-book" aria-label="Units" hidden></section>
+
+      <section id="view-study" aria-label="Study" hidden>
+        <button class="back" id="study-back">‹ <span id="back-to-book-label">Units</span></button>
+        <h2 id="study-title" style="margin:0 0 8px"></h2>
+        <nav class="tabs" aria-label="Modes">
+          <button class="tab" data-mode="flash" aria-selected="true">🗂 Flashcards</button>
+          <button class="tab" data-mode="sprint" aria-selected="false">⏱ 20 in 5:00</button>
+        </nav>
+        <section id="flash-view" aria-label="Flashcards"></section>
+        <section id="sprint-view" aria-label="Typing sprint" hidden></section>
+      </section>
     </main>
 
     <footer>
       Static site — no account, no tracking. Progress (known cards) stays in this browser's localStorage.<br />
-      Add a unit: edit <code>units.js</code>, push, GitHub Pages redeploys.
+      New book/unit? Edit <code>units.js</code>, push, GitHub Pages redeploys.
     </footer>
   </div>
   <script src="units.js"></script>

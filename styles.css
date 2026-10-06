@@ -37,22 +37,35 @@ body {
 .wrap { max-width: 640px; margin: 0 auto; padding: 16px 16px 48px; }
 header h1 { font-size: 1.5rem; margin: 12px 0 4px; }
 header p { color: var(--muted); margin: 0 0 12px; }
-.units { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
-.unit-pill {
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--ink);
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-size: 0.95rem;
+.back {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
+  padding: 12px 4px;
   min-height: 44px;
 }
-.unit-pill[aria-pressed="true"] {
-  border-color: var(--accent);
-  outline: 2px solid var(--accent);
-  font-weight: 700;
+.menu-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 0 0 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
+.menu-card h3 { margin: 0 0 4px; font-size: 1.15rem; }
+.menu-card p { margin: 0 0 8px; color: var(--muted); font-size: 0.9rem; }
+.meta { color: var(--muted); font-size: 0.9rem; }
+.bar { height: 8px; background: var(--line); border-radius: 999px; margin-top: 8px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
 .tabs { display: flex; gap: 8px; margin: 8px 0 16px; }
 .tab {
   flex: 1;
