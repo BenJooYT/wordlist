@@ -1,5 +1,7 @@
 # Hungarian vocab trainer (Magyar → English)
 
+🌐 Live site: **https://benjooyt.github.io/wordlist/**
+
 Static site — flashcards + sprint (20 words in 5:00, HU shown, type EN). No build, no deps. Works as GitHub Pages from `main` / root.
 
 ## Run locally
