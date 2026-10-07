@@ -91,7 +91,11 @@ header p { color: var(--muted); margin: 0 0 12px; }
 .big-en { font-size: 1.6rem; margin: 8px 0; text-align: center; color: var(--accent); font-weight: 700; }
 .alt { text-align: center; color: var(--muted); font-size: 0.9rem; min-height: 1.4em; }
 .flip-hint { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
-.flashcard { cursor: pointer; min-height: 240px; display: flex; flex-direction: column; justify-content: center; }
+.flashcard { cursor: pointer; height: clamp(280px, 45vh, 360px); display: flex; flex-direction: column; justify-content: flex-start; overflow: hidden; }
+.flashcard .kicker { min-height: 2.6em; }
+.flash-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.flash-mid .big-hu { margin: 4px 0; }
+.flash-mid .big-en { margin: 4px 0; }
 .row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 button.primary, button.ghost {
   border-radius: 12px;

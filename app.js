@@ -155,6 +155,19 @@ function resetFlash() {
   idx = 0; flipped = false;
 }
 function huKey(w) { return w.hu; }
+// Shrink card text until the fixed-height card fits — long phrases get
+// smaller instead of stretching the layout. Runs after the card is in DOM.
+function fitFlash(card) {
+  const hu = card.querySelector(".big-hu");
+  const en = card.querySelector(".big-en");
+  let sHu = 38, sEn = 26, guard = 30;
+  hu.style.fontSize = sHu + "px";
+  en.style.fontSize = sEn + "px";
+  while (guard-- > 0 && card.scrollHeight > card.clientHeight + 1 && (sHu > 18 || sEn > 15)) {
+    if (sHu > 18) { sHu -= 2; hu.style.fontSize = sHu + "px"; }
+    if (sEn > 15) { sEn -= 1; en.style.fontSize = sEn + "px"; }
+  }
+}
 function renderFlash() {
   const u = unit();
   const total = wordsOf(u).length;
@@ -169,14 +182,17 @@ function renderFlash() {
   card.setAttribute("aria-label", flipped ? "Hungarian and English. Activate to flip." : "Hungarian only. Activate to reveal English.");
   card.innerHTML = `
     <div class="kicker">${escapeHtml(u.title)}${w.sec ? " · " + escapeHtml(w.sec) : ""} · card ${idx % order.length + 1}/${order.length} ${isKnown ? "· ✓ known" : ""}</div>
-    <div class="big-hu">${escapeHtml(w.hu)}</div>
-    <div class="big-en">${flipped ? escapeHtml(w.en.join(" / ")) : "···"}</div>
-    <div class="alt">${flipped ? "" : "&nbsp;"}</div>
+    <div class="flash-mid">
+      <div class="big-hu">${escapeHtml(w.hu)}</div>
+      <div class="big-en">${flipped ? escapeHtml(w.en.join(" / ")) : "···"}</div>
+      <div class="alt">${flipped ? "" : "&nbsp;"}</div>
+    </div>
     <div class="flip-hint">${flipped ? "Tap to hide" : "Tap card or press Space to reveal"}</div>`;
   const flip = () => { flipped = !flipped; renderFlash(); };
   card.onclick = flip;
   card.onkeydown = (e) => { if (e.code === "Space" || e.key === "Enter") { e.preventDefault(); flip(); } };
   flashView.appendChild(card);
+  fitFlash(card);
 
   const row = document.createElement("div");
   row.className = "row";
