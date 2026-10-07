@@ -158,12 +158,13 @@ function huKey(w) { return w.hu; }
 // Shrink card text until the fixed-height card fits — long phrases get
 // smaller instead of stretching the layout. Runs after the card is in DOM.
 function fitFlash(card) {
+  const mid = card.querySelector(".flash-mid");
   const hu = card.querySelector(".big-hu");
   const en = card.querySelector(".big-en");
   let sHu = 38, sEn = 26, guard = 30;
   hu.style.fontSize = sHu + "px";
   en.style.fontSize = sEn + "px";
-  while (guard-- > 0 && card.scrollHeight > card.clientHeight + 1 && (sHu > 18 || sEn > 15)) {
+  while (guard-- > 0 && mid.scrollHeight > mid.clientHeight + 1 && (sHu > 18 || sEn > 15)) {
     if (sHu > 18) { sHu -= 2; hu.style.fontSize = sHu + "px"; }
     if (sEn > 15) { sEn -= 1; en.style.fontSize = sEn + "px"; }
   }
