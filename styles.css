@@ -125,4 +125,6 @@ input.answer:focus { border-color: var(--accent); outline: 2px solid var(--accen
 .missed { margin-top: 12px; }
 .missed li { margin: 6px 0; }
 footer { margin-top: 24px; color: var(--muted); font-size: 0.85rem; text-align: center; }
+.credit { color: var(--muted); text-decoration: none; }
+.credit:hover { text-decoration: underline; }
 .sr { position: absolute; left: -9999px; }
