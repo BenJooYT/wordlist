@@ -6,9 +6,9 @@
 // To add a book or unit: copy the template at the bottom. Nothing else changes.
 const BOOKS = [
   {
-    id: "oxford",
-    title: "Oxford Exam Trainer",
-    subtitle: "Érettségi exam prep · HU → EN",
+    id: "topic",
+    title: "Topic Book",
+    subtitle: "Topic-based wordlists · HU → EN",
     units: [
       {
         id: "u5",
@@ -236,7 +236,14 @@ const BOOKS = [
         ]
       }
     ]
-        },
+        }
+      ]
+  },
+  {
+    id: "oxford",
+    title: "Oxford Exam Trainer",
+    subtitle: "Érettségi exam prep · HU → EN",
+    units: [
       {
         id: "u6",
         title: "Unit 6 — Money",
