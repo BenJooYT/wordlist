@@ -6,9 +6,9 @@
 // To add a book or unit: copy the template at the bottom. Nothing else changes.
 const BOOKS = [
   {
-    id: "book1",
-    title: "Topic Book",
-    subtitle: "English wordlists HU → EN",
+    id: "oxford",
+    title: "Oxford Exam Trainer",
+    subtitle: "Érettségi exam prep · HU → EN",
     units: [
       {
         id: "u5",
@@ -236,7 +236,162 @@ const BOOKS = [
         ]
       }
     ]
-        }
+        },
+      {
+        id: "u6",
+        title: "Unit 6 — Money",
+        subtitle: "Oxford Exam Trainer · Unit 6",
+        sections: [
+          {
+            name: "Money",
+            words: [
+              { hu: "fizetés", en: ["salary"] },
+              { hu: "részvényes, résztulajdonos", en: ["shareholder"] },
+              { hu: "(érték)tőzsde", en: ["stock exchange", "stock exchange*"] },
+              { hu: "tőzsde", en: ["stock market", "stock market*"] },
+              { hu: "utánvét", en: ["cash on delivery"] },
+              { hu: "vmennyibe kerül", en: ["cost"] },
+              { hu: "hitelkártya", en: ["credit card"] },
+              { hu: "bankkártya, debitkártya", en: ["debit card"] },
+              { hu: "(pénzt) keres", en: ["earn"] },
+              { hu: "(pénzt) (fel/át)vált", en: ["exchange"] },
+              { hu: "mobiltelefonos fizetés", en: ["mobile phone payment"] },
+              { hu: "(pénz)átutalás", en: ["money transfer", "money transfer*"] },
+              { hu: "internetbankolás", en: ["online banking"] },
+              { hu: "fizet", en: ["pay"] },
+              { hu: "banki átutalással fizet", en: ["pay by bank transfer", "by bank transfer"] },
+              { hu: "(hitel)kártyával fizet", en: ["pay by credit card", "pay by debit card", "pay by credit/debit card"] },
+              { hu: "előre fizet", en: ["pay in advance", "in advance"] },
+              { hu: "készpénzzel fizet", en: ["pay in cash", "in cash"] },
+              { hu: "részletekben fizet", en: ["pay in instalments", "pay in installments", "in instalments"] },
+              { hu: "kifizet, visszafizet (adósságot, kölcsönt)", en: ["pay off a debt", "pay off a loan", "pay off debt", "pay off"] },
+              { hu: "spórol, félretesz", en: ["save up"] },
+              { hu: "pénzszűkében van", en: ["strapped for cash"] },
+              { hu: "készpénzt vesz fel (számláról, kártyáról, automatából)", en: ["withdraw"] }
+            ]
+          },
+          {
+            name: "Banking",
+            words: [
+              { hu: "bankszámla", en: ["account"] },
+              { hu: "éves, évi", en: ["annual"] },
+              { hu: "egyenleg", en: ["balance"] },
+              { hu: "kártyaszám", en: ["card number"] },
+              { hu: "kártyatípus", en: ["card type"] },
+              { hu: "kártyaazonosító kód, CVC-kód", en: ["card verification code", "card verification code (cvc)", "cvc"] },
+              { hu: "kártyatulajdonos", en: ["cardholder", "card holder"] },
+              { hu: "felszámít (díjat)", en: ["charge"] },
+              { hu: "díj", en: ["charge"] },
+              { hu: "chip", en: ["chip"] },
+              { hu: "tartozást rendez, (teljes egészében) visszafizet tartozást, kiegyenlít (egyenleget)", en: ["clear"] },
+              { hu: "érintésmentes fizetés, PayPass", en: ["contactless payment"] },
+              { hu: "hitel", en: ["credit"] },
+              { hu: "hitelkeret", en: ["credit limit"] },
+              { hu: "pénznem", en: ["currency"] },
+              { hu: "folyószámla", en: ["current account"] },
+              { hu: "nyilatkozat", en: ["declaration"] },
+              { hu: "1 (pénz)betét; 2 letét, kaució", en: ["deposit"] },
+              { hu: "pénzváltás", en: ["exchange"] },
+              { hu: "lejárati dátum/idő", en: ["expiration date", "expiry date"] },
+              { hu: "(fizetendő) díj", en: ["fee"] },
+              { hu: "kamat", en: ["interest"] },
+              { hu: "késedelmes fizetés díja", en: ["late-payment fee", "late payment fee"] },
+              { hu: "kölcsön, hitel", en: ["loan"] },
+              { hu: "hitelkeret-túllépés díja", en: ["over-the-limit fee", "over the limit fee"] },
+              { hu: "kamatráta", en: ["rate"] },
+              { hu: "megtakarítás", en: ["savings", "saving"] },
+              { hu: "megtakarítási számla, betétszámla", en: ["savings account"] },
+              { hu: "bankszámlakivonat", en: ["statement", "bank statement"] },
+              { hu: "feltételek és kondíciók", en: ["terms and conditions"] },
+              { hu: "tranzakció, ügylet", en: ["transaction"] },
+              { hu: "átutalás, átvezetés", en: ["transfer"] },
+              { hu: "készpénzfelvétel", en: ["withdrawal"] },
+              { hu: "pénzt vesz fel", en: ["withdraw money", "withdraw money*"] }
+            ]
+          },
+          {
+            name: "Retail and advertising",
+            words: [
+              { hu: "reklám, hirdetés", en: ["advert", "advertisement"] },
+              { hu: "óriásplakát (elhelyezésére szolgáló tábla)", en: ["billboard"] },
+              { hu: "márka, brand", en: ["brand"] },
+              { hu: "(reklám)kampány", en: ["campaign"] },
+              { hu: "reklámfilm", en: ["commercial"] },
+              { hu: "szórólap, brosúra", en: ["flyer"] },
+              { hu: "piackutatás", en: ["market research", "market research*"] },
+              { hu: "reklám, hírverés", en: ["publicity"] },
+              { hu: "kiskereskedelem", en: ["retail"] },
+              { hu: "szlogen", en: ["slogan"] },
+              { hu: "érték", en: ["value"] },
+              { hu: "ár-érték arány", en: ["value for money", "for money"] }
+            ]
+          },
+          {
+            name: "The world of business",
+            words: [
+              { hu: "(üzleti) mérleg", en: ["balance"] },
+              { hu: "mérleghiány, deficit", en: ["deficit"] },
+              { hu: "adományoz", en: ["donate"] },
+              { hu: "adomány", en: ["donation"] },
+              { hu: "e-kereskedelem", en: ["e-commerce", "ecommerce", "e-commerce*"] },
+              { hu: "(meg)alapít", en: ["found"] },
+              { hu: "alapító", en: ["founder"] },
+              { hu: "jövedelem", en: ["income"] },
+              { hu: "befektet, beruház", en: ["invest"] },
+              { hu: "befektetés, beruházás", en: ["investment"] },
+              { hu: "részvényekbe", en: ["invest in stock", "invest in shares", "invest in stocks"] },
+              { hu: "befektető", en: ["investor", "investor*"] },
+              { hu: "kölcsön", en: ["loan", "loan*"] },
+              { hu: "nyereség, profit", en: ["profit"] },
+              { hu: "vásárlóerő", en: ["purchasing power"] }
+            ]
+          },
+          {
+            name: "Words in context",
+            words: [
+              { hu: "vonzerő", en: ["appeal"] },
+              { hu: "megragad, magával ragad", en: ["capture"] },
+              { hu: "kidolgoz, kifejleszt", en: ["devise"] },
+              { hu: "kivitelezés", en: ["execution"] },
+              { hu: "innováció, újítás", en: ["innovation"] },
+              { hu: "vásárlás, vétel", en: ["purchase"] }
+            ]
+          },
+          {
+            name: "Purpose and contrast",
+            words: [
+              { hu: "habár", en: ["although"] },
+              { hu: "annak ellenére, hogy; ... ellenére", en: ["despite"] },
+              { hu: "azért, hogy ... (ige)", en: ["in order to", "in order to (+ verb)"] },
+              { hu: "azért, hogy ... (mellékmondat)", en: ["so that", "so that (+ clause)"] }
+            ]
+          },
+          {
+            name: "Inversion",
+            words: [
+              { hu: "még alig, hogy ...", en: ["hardly had"] },
+              { hu: "mit sem sejtettem (hogy) ...", en: ["little did i know (that)", "little did i know that", "little did i know"] },
+              { hu: "alig, hogy ...", en: ["no sooner had"] },
+              { hu: "ritkán", en: ["seldom"] },
+              { hu: "semmi szín alatt, semmilyen körülmények között", en: ["under no circumstances"] }
+            ]
+          },
+          {
+            name: "Other words and phrases",
+            words: [
+              { hu: "mindenekfelett", en: ["above all else"] },
+              { hu: "zsebpénz", en: ["allowance"] },
+              { hu: "Cseppet sem izgat / Eszem ágában sincs / Nekem tökmindegy.", en: ["can't be bothered", "cant be bothered"] },
+              { hu: "költségek", en: ["expenses"] },
+              { hu: "csakazértis", en: ["for the sake of it"] },
+              { hu: "Megfogott. / Rabja lettem.", en: ["i was hooked"] },
+              { hu: "megválik vmitől, (vonakodva) átad (pénzt, ellenszolgáltatást)", en: ["part with"] },
+              { hu: "egy vagyont költ", en: ["spend a fortune on"] },
+              { hu: "kb. közvetlenül az otthonába", en: ["to your doorstep"] }
+            ]
+          }
+        ]
+      }
       ]
   }
 ];
