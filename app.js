@@ -137,6 +137,7 @@ tabs.forEach(t => t.onclick = () => {
   tabs.forEach(x => x.setAttribute("aria-selected", x === t ? "true" : "false"));
   flashView.hidden = mode !== "flash";
   sprintView.hidden = mode !== "sprint";
+  if (mode !== "flash") document.onkeydown = null;
   if (mode === "sprint") { stopTimer(); renderSprintIntro(); }
 });
 
@@ -242,16 +243,18 @@ function renderSprintIntro() {
     <div class="kicker">Sprint · ${escapeHtml(u.title)}</div>
     <h2 style="margin:.4em 0">20 words in 5 minutes</h2>
     ${u.sections ? `<p style="color:var(--muted)">Sections: ${u.sections.map(s => escapeHtml(s.name) + " (" + s.words.length + ")").join(" · ")}</p>` : ""}
-    <p style="color:var(--muted)">Hungarian shown only — type the English equivalent. ${n} words this round, 5:00 on the clock. Case-insensitive; alternatives accepted.</p>
+    <p style="color:var(--muted)">Hungarian shown only — type the English equivalent and keep going. ${n} words this round, 5:00 on the clock. Case-insensitive; alternatives accepted. Nothing is marked right or wrong until the sprint ends.</p>
     <div class="row"><button class="primary" id="s-start">Start sprint (${n} words)</button></div>`;
   sprintView.appendChild(box);
   $("#s-start").onclick = startSprint;
 }
 function startSprint() {
-  const u = unit();
   const words = shuffled(wordsOf(unit())).slice(0, Math.min(SPRINT_N, wordsOf(unit()).length));
-  sprint = { words, i: 0, correct: 0, missed: [], left: SPRINT_SEC, locked: false, done: false, t0: Date.now() };
+  sprint = { words, i: 0, correct: 0, log: [], left: SPRINT_SEC, done: false, t0: Date.now() };
   renderSprintQ();
+  startTimer();
+}
+function startTimer() {
   stopTimer();
   timerId = setInterval(() => {
     if (!sprint || sprint.done) { stopTimer(); return; }
@@ -270,93 +273,102 @@ function fmt(s) {
 }
 function renderSprintQ() {
   const u = unit();
-  sprintView.innerHTML = "";
+  if (!sprint || sprint.done) return;
   if (sprint.i >= sprint.words.length) { finishSprint(false); return; }
   const w = sprint.words[sprint.i];
+  sprintView.innerHTML = "";
   const box = document.createElement("div");
   box.className = "card";
   box.innerHTML = `
     <div class="sprint-top">
-      <span class="kicker">Sprint · ${sprint.i + 1}/${sprint.words.length} · ✓ ${sprint.correct}</span>
+      <span class="kicker">Sprint · ${sprint.i + 1}/${sprint.words.length} · answered ${sprint.log.length}</span>
       <span class="timer" id="s-timer">${fmt(sprint.left)}</span>
     </div>
     <div class="big-hu" lang="hu">${escapeHtml(w.hu)}</div>
     <label class="sr" for="s-in">English equivalent</label>
     <input class="answer" id="s-in" lang="en" autocomplete="off" autocapitalize="off" spellcheck="false"
       placeholder="Type the English…" />
-    <div class="feedback" id="s-fb" aria-live="polite"></div>
     <div class="row">
       <button class="ghost" id="s-skip">Skip</button>
       <button class="primary" id="s-check">Check ↵</button>
     </div>
-    <div class="progress">${escapeHtml(u.title)}${w.sec ? " · " + escapeHtml(w.sec) : ""} · HU shown only</div>`;
+    <div class="progress">${escapeHtml(u.title)}${w.sec ? " · " + escapeHtml(w.sec) : ""} · answers shown at the end</div>`;
   sprintView.appendChild(box);
   const inp = $("#s-in");
   inp.focus();
-  $("#s-check").onclick = checkSprint;
-  $("#s-skip").onclick = () => {
-    sprint.missed.push({ w, why: "skipped" });
-    sprint.i++; sprint.locked = false; renderSprintQ();
+  const check = $("#s-check");
+  const skip = $("#s-skip");
+  // Keep focus in the input when tapping the buttons: cancelling mousedown
+  // stops the soft keyboard from closing (and the layout from jumping under
+  // the finger) before the tap turns into a click.
+  check.onmousedown = (e) => e.preventDefault();
+  skip.onmousedown = (e) => e.preventDefault();
+  check.onclick = checkSprint;
+  skip.onclick = () => {
+    if (!sprint || sprint.done) return;
+    sprint.log.push({ w, ok: false, typed: "", skipped: true });
+    sprint.i++; renderSprintQ();
   };
-  inp.onkeydown = (e) => { if (e.key === "Enter") checkSprint(); };
+  inp.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); checkSprint(); } };
   if (sprint.left <= 60) $("#s-timer").classList.add("danger");
 }
 function checkSprint() {
-  if (!sprint || sprint.locked || sprint.done) return;
+  if (!sprint || sprint.done) return;
   const w = sprint.words[sprint.i];
+  if (!w) return;
   const inp = $("#s-in");
-  const fb = $("#s-fb");
-  if (accepted(inp.value, w)) {
-    sprint.correct++;
-    sprint.locked = true;
-    fb.textContent = "✓ Correct";
-    fb.className = "feedback ok";
-    sprint.i++;
-    setTimeout(() => { if (sprint && !sprint.done) renderSprintQ(); }, 450);
-  } else {
-    sprint.locked = true;
-    sprint.missed.push({ w, why: `you wrote: ${inp.value.trim() || "—"}` });
-    fb.textContent = `✗ ${w.en.join(" / ")}`;
-    fb.className = "feedback no";
-    const btn = $("#s-check");
-    btn.textContent = "Next →";
-    btn.onclick = () => { sprint.i++; sprint.locked = false; renderSprintQ(); };
-  }
+  const typed = (inp ? inp.value : "").trim();
+  const ok = accepted(typed, w);
+  if (ok) sprint.correct++;
+  sprint.log.push({ w, ok, typed });
+  sprint.i++;
+  renderSprintQ();
 }
 function finishSprint(timeUp) {
   if (!sprint || sprint.done) return;
+  const inp = $("#s-in");
+  if (sprint.i < sprint.words.length) {
+    const typed = (inp ? inp.value : "").trim();
+    const w = sprint.words[sprint.i];
+    const ok = accepted(typed, w);
+    if (ok) sprint.correct++;
+    sprint.log.push({ w, ok, typed, ranOut: true });
+    sprint.i++;
+  }
+  while (sprint.i < sprint.words.length) {
+    sprint.log.push({ w: sprint.words[sprint.i++], ok: false, typed: "", ranOut: true });
+  }
   sprint.done = true;
   stopTimer();
   const used = SPRINT_SEC - sprint.left;
   const total = sprint.words.length;
+  const missed = sprint.log.filter(x => !x.ok);
   sprintView.innerHTML = "";
   const box = document.createElement("div");
   box.className = "card";
   box.innerHTML = `
     <div class="kicker">Sprint result · ${escapeHtml(unit().title)}</div>
     <h2 style="margin:.4em 0">${timeUp ? "⏱ Time!" : "Done!"} ${sprint.correct}/${total}</h2>
-    <p style="color:var(--muted)">Time used: ${fmt(used)} / ${fmt(SPRINT_SEC)} · Missed: ${sprint.missed.length}</p>
-    ${sprint.missed.length ? `<ol class="missed">${sprint.missed.map(m =>
-      `<li>${m.w.sec ? `<span style="color:var(--muted)">[${escapeHtml(m.w.sec)}]</span> ` : ""}<b lang="hu">${escapeHtml(m.w.hu)}</b> → ${escapeHtml(m.w.en.join(" / "))} <span style="color:var(--muted)">(${escapeHtml(m.why)})</span></li>`).join("")}</ol>` : "<p>Flawless. Szép munka! 🎉</p>"}
+    <p style="color:var(--muted)">Time used: ${fmt(used)} / ${fmt(SPRINT_SEC)} · Missed: ${missed.length}</p>
+    <ol class="review">${sprint.log.map(x => `
+      <li class="${x.ok ? "ok" : "no"}">
+        <span class="mark" aria-hidden="true">${x.ok ? "✓" : "✗"}</span>
+        <span>${x.w.sec ? `<span class="typed">[${escapeHtml(x.w.sec)}]</span> ` : ""}<b lang="hu">${escapeHtml(x.w.hu)}</b> → ${escapeHtml(x.w.en.join(" / "))}${
+          x.ok ? "" : ` <span class="typed">(${x.skipped ? "skipped" : x.typed ? "you wrote: " + escapeHtml(x.typed) : x.ranOut ? "out of time" : "blank"})</span>`
+        }</span>
+      </li>`).join("")}</ol>
     <div class="row">
       <button class="ghost" id="s-again">↻ New sprint</button>
-      <button class="primary" id="s-retry" ${sprint.missed.length ? "" : "disabled"}>Retry missed (${sprint.missed.length})</button>
+      <button class="primary" id="s-retry" ${missed.length ? "" : "disabled"}>Retry missed (${missed.length})</button>
     </div>`;
   sprintView.appendChild(box);
   $("#s-again").onclick = () => renderSprintIntro();
   const r = $("#s-retry");
-  if (sprint.missed.length) r.onclick = () => {
-    const words = shuffled(sprint.missed.map(m => m.w));
-    sprint = { words, i: 0, correct: 0, missed: [], left: SPRINT_SEC, locked: false, done: false, t0: Date.now() };
+  if (missed.length) r.onclick = () => {
+    const words = shuffled(missed.map(m => m.w));
+    sprint = { words, i: 0, correct: 0, log: [], left: SPRINT_SEC, done: false, t0: Date.now() };
     renderSprintQ();
-    stopTimer();
-    timerId = setInterval(() => {
-      if (!sprint || sprint.done) { stopTimer(); return; }
-      sprint.left--;
-      const t = $("#s-timer");
-      if (t) { t.textContent = fmt(sprint.left); if (sprint.left <= 60) t.classList.add("danger"); }
-      if (sprint.left <= 0) finishSprint(true);
-    }, 1000);
+    startTimer();
   };
 }
 
